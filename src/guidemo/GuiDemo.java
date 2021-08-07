@@ -58,6 +58,10 @@ public class GuiDemo extends JFrame{
 		IconSupport iconSupport = new IconSupport(drawPanel);
 		content.add( iconSupport.createToolbar(true), BorderLayout.SOUTH );
 		
+		//	Add an icon toolbar as per requirements to the NORTH of the layout
+
+		content.add( makeToolbar(), BorderLayout.NORTH);
+
 		// Create the menu bar and add it to the frame.  The TextMenu is defined by
 		// a separate class.  The other menus are created in this class.
 		
@@ -133,6 +137,34 @@ public class GuiDemo extends JFrame{
 		});
 		return menu;
 	}
+
+	/**
+	 * Create the top Toolbar menu, using objects of type JToolBar,
+	 * a class that is defined later in this file.
+	 */
+	private JToolBar makeToolbar() {
+
+		JToolBar topToolbar = new JToolBar(JToolBar.HORIZONTAL);
+
+		JButton topToolbarPicture = topToolbar.add(newPictureAction);
+		topToolbarPicture.setToolTipText("Clear picture to default state");
+		JButton topToolbarPicture2 = topToolbar.add(saveImageAction);
+		topToolbarPicture2.setToolTipText("Save picture to a file");
+
+		topToolbar.addSeparator(new Dimension(15,0));
+		topToolbar.add(new ChooseBackgroundAction("Mandelbrot"));
+		topToolbar.add(new ChooseBackgroundAction("Earthrise"));
+		topToolbar.add(new ChooseBackgroundAction("Sunset"));
+		topToolbar.add(new ChooseBackgroundAction("Cloud"));
+		topToolbar.add(new ChooseBackgroundAction("Eagle_nebula"));
+		
+		topToolbar.addSeparator(new Dimension(15,0));
+		topToolbar.add(new ChooseBackgroundAction("Custom..."));
+		topToolbar.add(new ChooseBackgroundAction("Color..."));
+		topToolbar.addSeparator();
+
+		return topToolbar;
+	}
 	
 	private AbstractAction newPictureAction = 
 		new AbstractAction("New", Util.iconFromResource("resources/action_icons/fileopen.png")) {
@@ -196,8 +228,14 @@ public class GuiDemo extends JFrame{
     		}
     		if (text.equals("Color..."))
     			putValue(Action.SHORT_DESCRIPTION, "<html>Use a solid color for background<br>instead of an image.</html>");
-    		else if (text.equals("Custom..."))
-    			putValue(Action.SHORT_DESCRIPTION, "<html>Select an image file<br>to use as the background.</html>");
+    		else if (text.equals("Custom...")) {
+				putValue(
+					Action.SMALL_ICON,
+    				Util.iconFromResource("resources/action_icons/fileopen.png")
+				);
+						
+				putValue(Action.SHORT_DESCRIPTION, "<html>Select an image file<br>to use as the background.</html>");
+			}
     		else
     			putValue(Action.SHORT_DESCRIPTION, "Use this image as the background.");
     			
