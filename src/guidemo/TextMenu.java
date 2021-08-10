@@ -15,6 +15,9 @@ public class TextMenu extends JMenu {
 	
 	private JCheckBoxMenuItem bold;   // controls whether the text is bold or not.
 	private JCheckBoxMenuItem italic; // controls whether the text is italic or not.
+
+	//	add required radio button
+	private JRadioButtonMenuItem justification; // sets text justification
 	
 	/**
 	 * Constructor creates all the menu commands and adds them to the menu.
@@ -34,6 +37,7 @@ public class TextMenu extends JMenu {
 				}
 			}
 		});
+
 		final JMenuItem size = new JMenuItem("Set Size...");
 		size.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -52,6 +56,39 @@ public class TextMenu extends JMenu {
 				}
 			}
 		});
+
+		//	Adding the required line height menu item
+		final JMenuItem lineSpacing = new JMenuItem("Set Line Spacing...");
+
+		lineSpacing.addActionListener( new ActionListener() {
+
+			public void actionPerformed(ActionEvent evt) {
+				double currentSpacing = panel.getTextItem().getLineHeightMultiplier();
+				
+				String s = JOptionPane.showInputDialog(
+					panel, 
+					"Multiply the default line spacing \nby what amount?",
+					currentSpacing
+				);
+
+				if (s != null && s.trim().length() > 0) {
+					try {
+						double newSpacing = Double.parseDouble(s.trim()); // can throw NumberFormatException
+						panel.getTextItem().setLineHeightMultiplier(newSpacing); // can throw IllegalArgumentException
+						panel.repaint();
+					}
+					catch (Exception e) {
+						JOptionPane.showMessageDialog(
+							panel, 
+							s + 
+							" is not a legal line height.\n" +
+							"Please enter a positive integer."
+						);
+					}
+				}
+			}
+		});
+
 		final JMenuItem color = new JMenuItem("Set Color...");
 		color.addActionListener( new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -77,16 +114,73 @@ public class TextMenu extends JMenu {
 				panel.repaint();
 			}
 		});
+
 		add(change);
 		addSeparator();
 		add(size);
+		add(lineSpacing);
 		add(color);
 		add(italic);
 		add(bold);
+
+		//	insert required justification submenu
+		add(makeJustificationSubmenu());
+		
 		addSeparator();
 		add(makeFontNameSubmenu());
 	}
 	
+	/**
+	 * Create a menu with checkboxes to set the text justification on LEFT, 
+	 * CENTER, or RIGHT).
+	 * This functionality is accessed via the "Text" menu.
+	 */
+	private JMenuItem makeJustificationSubmenu() {
+
+		JMenu justificationMenu = new JMenu("Justify");
+
+		ActionListener setJustificationAction = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if ( e.getActionCommand() == "Left" ) {
+					panel.getTextItem().setJustify(TextItem.LEFT);
+				}
+				else if ( e.getActionCommand() == "Center") {
+					panel.getTextItem().setJustify(TextItem.CENTER);
+				}
+				else {
+					panel.getTextItem().setJustify(TextItem.RIGHT);
+				}
+
+				panel.repaint();
+			}
+		};
+	
+		ButtonGroup JustificationRadioButtons = new ButtonGroup();  
+		
+		JRadioButtonMenuItem leftMenuItem = new JRadioButtonMenuItem("Left");  
+		leftMenuItem.addActionListener(setJustificationAction);
+		
+		JRadioButtonMenuItem centerMenuItem = new JRadioButtonMenuItem("Center");
+		centerMenuItem.addActionListener(setJustificationAction);
+		
+		JRadioButtonMenuItem rightMenuItem = new JRadioButtonMenuItem("Right");
+		rightMenuItem.addActionListener(setJustificationAction);
+		
+		JustificationRadioButtons.add(leftMenuItem);
+		JustificationRadioButtons.add(centerMenuItem);
+		JustificationRadioButtons.add(rightMenuItem);
+		
+		justificationMenu.add(leftMenuItem);
+		justificationMenu.add(centerMenuItem);
+		justificationMenu.add(rightMenuItem);
+
+		//	set to default left justification 
+		leftMenuItem.setSelected(true);
+		this.justification = leftMenuItem;
+		
+		return justificationMenu;
+	}
+
 	/**
 	 * Reset the state of the menu to reflect the default settings for text
 	 * in a DrawPanel.  (Sets the italic and bold checkboxes to unselected.)
@@ -97,6 +191,7 @@ public class TextMenu extends JMenu {
 	public void setDefaults() {
 		italic.setSelected(false);
 		bold.setSelected(false);
+		justification.setSelected(true);
 	}
 	
 	/**

@@ -43,14 +43,18 @@ public class GuiDemo extends JFrame{
 		
 		drawPanel = new DrawPanel();
 		drawPanel.getTextItem().setText(
-				"Big bugs have little bugs\n" +
-				"      Upon their backs to bite 'em,\n" +
-				"And little bugs have littler bugs,\n" +
-				"      And so it goes, ad infinitum."
+				"Lengua Piemonteisa - \n" +
+				"       – La cativa lavandera a treuva mai la bon-a péra \n\n" +
+				"Italiano - \n" +
+				"       – La cattiva lavandaia non trova mai la buona pietra\n\n" +
+				"English - \n" +
+				"       – The bad laundress never finds a good rock\n" +
+				"         (Meaning: He who does not want to work,\n" +
+				"          always finds excuses not to).\n"
 			);
 		drawPanel.getTextItem().setFontSize(36);
 		drawPanel.getTextItem().setJustify(TextItem.LEFT);
-		drawPanel.setBackgroundImage(Util.getImageResource("resources/images/mandelbrot.jpeg"));
+		drawPanel.setBackgroundImage(Util.getImageResource("resources/images/Turin_monte_cappuccini.jpg"));
 		content.add(drawPanel, BorderLayout.CENTER);
 		
 		// Add an icon toolbar to the SOUTH position of the layout
@@ -223,12 +227,33 @@ public class GuiDemo extends JFrame{
     		super(text);
     		this.text = text;
     		if (!text.equals("Custom...") && !text.equals("Color...")) {
-    			putValue(Action.SMALL_ICON, 
-    					Util.iconFromResource("resources/images/" + text.toLowerCase() + "_thumbnail.jpeg"));
+    			putValue(
+					Action.SMALL_ICON, 
+    				Util.iconFromResource("resources/images/" + text.toLowerCase() + "_thumbnail.jpeg")
+				);
+				putValue(Action.SHORT_DESCRIPTION, "Use this image as the background.");
     		}
-    		if (text.equals("Color..."))
-    			putValue(Action.SHORT_DESCRIPTION, "<html>Use a solid color for background<br>instead of an image.</html>");
-    		else if (text.equals("Custom...")) {
+
+    		if (text.equals("Color...")) {
+    			putValue(
+					Action.SHORT_DESCRIPTION, 
+					"<html>Use a solid color for background<br>instead of an image.</html>"
+				);
+				
+				BufferedImage selectBackgroundColor = new BufferedImage(32,32,BufferedImage.TYPE_INT_RGB);
+    			Graphics bgGraphics = selectBackgroundColor.createGraphics();
+    			bgGraphics.setColor(Color.GRAY);
+    			bgGraphics.fillRect(0, 0, 32, 32);
+				bgGraphics.setColor(Color.RED);
+    			bgGraphics.fillRect(2, 2, 11, 28);
+    			bgGraphics.setColor(Color.GREEN);
+    			bgGraphics.fillRect(11, 2, 10, 28);
+    			bgGraphics.setColor(Color.BLUE);
+    			bgGraphics.fillRect(22, 2, 11, 28);
+    			bgGraphics.dispose();
+    			putValue(Action.SMALL_ICON, new ImageIcon(selectBackgroundColor));
+			}
+			else if (text.equals("Custom...")) {
 				putValue(
 					Action.SMALL_ICON,
     				Util.iconFromResource("resources/action_icons/fileopen.png")
@@ -236,8 +261,9 @@ public class GuiDemo extends JFrame{
 						
 				putValue(Action.SHORT_DESCRIPTION, "<html>Select an image file<br>to use as the background.</html>");
 			}
-    		else
-    			putValue(Action.SHORT_DESCRIPTION, "Use this image as the background.");
+    		// else {
+    		// 	putValue(Action.SHORT_DESCRIPTION, "Use this image as the background.");
+			// }
     			
     	}
 		public void actionPerformed(ActionEvent evt) {
