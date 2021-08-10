@@ -44,11 +44,11 @@ public class GuiDemo extends JFrame{
 		drawPanel = new DrawPanel();
 		drawPanel.getTextItem().setText(
 				"Lengua Piemonteisa - \n" +
-				"       â€“ La cativa lavandera a treuva mai la bon-a pÃ©ra \n\n" +
+				"       “ La cativa lavandera a treuva mai la bon-a pera \n\n" +
 				"Italiano - \n" +
-				"       â€“ La cattiva lavandaia non trova mai la buona pietra\n\n" +
+				"       “ La cattiva lavandaia non trova mai la buona pietra\n\n" +
 				"English - \n" +
-				"       â€“ The bad laundress never finds a good rock\n" +
+				"       “ The bad laundress never finds a good rock\n" +
 				"         (Meaning: He who does not want to work,\n" +
 				"          always finds excuses not to).\n"
 			);
